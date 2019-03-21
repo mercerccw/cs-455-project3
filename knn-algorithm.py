@@ -4,14 +4,14 @@ import math
 import operator
 
 
-def loadDataset(filename, split, trainingSet=[], testSet=[]):
+def loadDataset(filename, trainingSet=[], testSet=[]):
     with open(filename, 'rt') as csvfile:
         lines = csv.reader(csvfile)
         dataset = list(lines)
         for x in range(len(dataset) - 1):
             for y in range(4):
-                dataset[x][y] = float(dataset[x][y])
-            if random.random() < split:
+               dataset[x][y] = float(dataset[x][y])
+            if x < 41 or x > 60:
                 trainingSet.append(dataset[x])
             else:
                 testSet.append(dataset[x])
@@ -58,31 +58,31 @@ def getAccuracy(testSet, predictions):
 
 
 def main():
-    dataSet = input("What dataset would you like to run?")
-    dataSet.join(dataSet.split()).lower()
+    # dataSet = input("What dataset would you like to run? \n").lower().strip()
+    dataSet = 'iris'
     if dataSet == "iris":
         # prepare data
         trainingSet = []
         testSet = []
-        split = 0.67
-        loadDataset('iris.data', split, trainingSet, testSet)
+        #split = 0.2
+        loadDataset('iris.data', trainingSet, testSet)
         print
         'Train set: ' + repr(len(trainingSet))
         print
         'Test set: ' + repr(len(testSet))
         # generate predictions
         predictions = []
-        #k = int(input("K Value: "))
-        for i in range(1, 10):
-            if i % 2 != 0:
-                k = i
-                for x in range(len(testSet)):
-                    neighbors = getNeighbors(trainingSet, testSet[x], k)
-                    result = getResponse(neighbors)
-                    predictions.append(result)
-                    # print('> predicted=' + repr(result) + ', actual=' + repr(testSet[x][-1]))
-                accuracy = getAccuracy(testSet, predictions)
-                print('Accuracy of k = ', k, ' : ' + repr(accuracy) + '%')
+        k = int(input("How many neighbors would you like to use this time? \n" ))
+        # for i in range(1, 10):
+        # if i % 2 != 0:
+        # k = i
+        for x in range(len(testSet)):
+            neighbors = getNeighbors(trainingSet, testSet[x], k)
+            result = getResponse(neighbors)
+            predictions.append(result)
+            print('> predicted=' + repr(result) + ', actual=' + repr(testSet[x][-1]))
+        accuracy = getAccuracy(testSet, predictions)
+        print('Accuracy of k = ', k, ' : ' + repr(accuracy) + '%')
 
 
 main()
