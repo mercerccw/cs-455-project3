@@ -58,25 +58,31 @@ def getAccuracy(testSet, predictions):
 
 
 def main():
-    # prepare data
-    trainingSet = []
-    testSet = []
-    split = 0.67
-    loadDataset('iris.data', split, trainingSet, testSet)
-    print
-    'Train set: ' + repr(len(trainingSet))
-    print
-    'Test set: ' + repr(len(testSet))
-    # generate predictions
-    predictions = []
-    k = 3
-    for x in range(len(testSet)):
-        neighbors = getNeighbors(trainingSet, testSet[x], k)
-        result = getResponse(neighbors)
-        predictions.append(result)
-        print('> predicted=' + repr(result) + ', actual=' + repr(testSet[x][-1]))
-    accuracy = getAccuracy(testSet, predictions)
-    print('Accuracy: ' + repr(accuracy) + '%')
+    dataSet = input("What dataset would you like to run?")
+    dataSet.join(dataSet.split()).lower()
+    if dataSet == "iris":
+        # prepare data
+        trainingSet = []
+        testSet = []
+        split = 0.67
+        loadDataset('iris.data', split, trainingSet, testSet)
+        print
+        'Train set: ' + repr(len(trainingSet))
+        print
+        'Test set: ' + repr(len(testSet))
+        # generate predictions
+        predictions = []
+        #k = int(input("K Value: "))
+        for i in range(1, 10):
+            if i % 2 != 0:
+                k = i
+                for x in range(len(testSet)):
+                    neighbors = getNeighbors(trainingSet, testSet[x], k)
+                    result = getResponse(neighbors)
+                    predictions.append(result)
+                    # print('> predicted=' + repr(result) + ', actual=' + repr(testSet[x][-1]))
+                accuracy = getAccuracy(testSet, predictions)
+                print('Accuracy of k = ', k, ' : ' + repr(accuracy) + '%')
 
 
 main()
