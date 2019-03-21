@@ -10,8 +10,8 @@ def loadDataset(filename, trainingSet=[], testSet=[]):
         dataset = list(lines)
         for x in range(len(dataset) - 1):
             for y in range(4):
-               dataset[x][y] = float(dataset[x][y])
-            if x < 41 or x > 60:
+                dataset[x][y] = float(dataset[x][y])
+            if x < 40 or x > 59:
                 trainingSet.append(dataset[x])
             else:
                 testSet.append(dataset[x])
@@ -37,6 +37,22 @@ def getNeighbors(trainingSet, testInstance, k):
     return neighbors
 
 
+def classVote(neighbors):
+    vote_for_1 = 0
+    vote_for_2 = 0
+    option_1 = 'Iris-versicolor'
+    option_2 = 'Iris-virginica'
+    for i in range(len(neighbors)):
+        if (neighbors[i][4] == option_1):
+            vote_for_1 = vote_for_1 + 1
+        else:
+            vote_for_2 = vote_for_2 + 1
+    if (vote_for_1 > vote_for_2):
+        return option_1
+    else:
+        return option_2
+
+
 def getResponse(neighbors):
     classVotes = {}
     for x in range(len(neighbors)):
@@ -51,8 +67,8 @@ def getResponse(neighbors):
 
 def getAccuracy(testSet, predictions):
     correct = 0
-    for x in range(len(testSet)):
-        if testSet[x][-1] == predictions[x]:
+    for x in range(len(predictions)):
+        if testSet[x][4] == predictions[x]:
             correct += 1
     return (correct / float(len(testSet))) * 100.0
 
@@ -64,7 +80,7 @@ def main():
         # prepare data
         trainingSet = []
         testSet = []
-        #split = 0.2
+        # split = 0.2
         loadDataset('iris.data', trainingSet, testSet)
         print
         'Train set: ' + repr(len(trainingSet))
@@ -72,17 +88,37 @@ def main():
         'Test set: ' + repr(len(testSet))
         # generate predictions
         predictions = []
-        k = int(input("How many neighbors would you like to use this time? \n" ))
+        k = int(input("How many neighbors would you like to use this time? \n"))
         # for i in range(1, 10):
-        # if i % 2 != 0:
-        # k = i
+        #     if i % 2 != 0:
+        #         k = i
         for x in range(len(testSet)):
             neighbors = getNeighbors(trainingSet, testSet[x], k)
-            result = getResponse(neighbors)
+            result = classVote(neighbors)
             predictions.append(result)
-            print('> predicted=' + repr(result) + ', actual=' + repr(testSet[x][-1]))
+            print('> predicted=' + repr(result) + ', actual=' + repr(testSet[x][4]))
         accuracy = getAccuracy(testSet, predictions)
         print('Accuracy of k = ', k, ' : ' + repr(accuracy) + '%')
 
 
 main()
+# k = 9
+#
+# trainingSet = []
+# testSet = []
+# predictions = []
+#
+# loadDataset('iris.data', trainingSet, testSet)
+# neighbors = getNeighbors(trainingSet, testSet[16], k)
+#
+# print(testSet[16][4])
+# print(neighbors)
+# #print(neighbors[0][4])
+# result = classVote(neighbors)
+# predictions.append(result)
+# print(result)
+# # print('> predicted=' + repr(result) + ', actual=' + repr(testSet[16][4]))
+# accuracy = getAccuracy(testSet, predictions)
+# print('Accuracy of k = ', k, ' : ' + repr(accuracy) + '%')
+
+
