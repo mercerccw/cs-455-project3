@@ -99,7 +99,7 @@ def main():
             accuracy = getAccuracy(testSet, predictions)
             print('Accuracy of k = ', k, ' : ' + repr(accuracy) + '%')
             keepRunning = input("Would you like the run the software again? (y/n) \n").lower().strip()
-            if keepRunning == 'n':
+            if keepRunning == 'n' or 'no':
                 run = False
         else:
             print("Not a valid dataset")
