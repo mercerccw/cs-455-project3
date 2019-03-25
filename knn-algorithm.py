@@ -98,8 +98,8 @@ def main():
                 # print('> predicted=' + repr(result) + ', actual=' + repr(testSet[x][4]))
             accuracy = getAccuracy(testSet, predictions)
             print('Accuracy of k = ', k, ' : ' + repr(accuracy) + '%')
-            keepRunning = input("Would you like the run the software again? (y/n) \n").lower().strip()
-            if keepRunning == 'n' or 'no':
+            keepRunning = input("Would you like the run the software again? (yes/no) \n").lower().strip()
+            if keepRunning == 'no':
                 run = False
         else:
             print("Not a valid dataset")
